@@ -15,5 +15,3 @@ export function fetchCards(searchQuery) {
     return res.json();
   });
 }
-
-console.log(window);

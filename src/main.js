@@ -1,6 +1,3 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -29,7 +26,7 @@ function onSearchFormSubmit(e) {
 
   fetchCards(searchQuery)
     .then(data => {
-      renderCards(data);
+      renderCards(cardsList, data);
     })
     .then(() => toggleLoader());
 }
