@@ -5,6 +5,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { fetchCards } from './js/pixabay-api';
+import { renderCards } from './js/render-functions';
 
 const searchForm = document.querySelector('.search-form');
 const cardsList = document.querySelector('.card-list');
@@ -31,59 +32,6 @@ function onSearchFormSubmit(e) {
       renderCards(data);
     })
     .then(() => toggleLoader());
-}
-
-function renderCards({ hits }) {
-  if (!hits.length) {
-    iziToast.error({
-      title: 'Error',
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-      position: 'topRight',
-    });
-    return;
-  }
-  const markup = getMarkup(hits);
-  cardsList.insertAdjacentHTML('beforeend', markup);
-  instance.refresh();
-}
-
-function getMarkup(data) {
-  return data
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `<li class="card-item">
-  <a href=${largeImageURL}
-    ><img src=${webformatURL} alt="${tags}" height="200"/>
-    <ul class="card-info">
-      <li>
-        Likes
-        <p>${likes}</p>
-      </li>
-      <li>
-        Views
-        <p>${views}</p>
-      </li>
-      <li>
-        Comments
-        <p>${comments}</p>
-      </li>
-      <li>
-        Downloads
-        <p>${downloads}</p>
-      </li>
-    </ul></a
-  >
-</li>`
-    )
-    .join('');
 }
 
 function toggleLoader() {
