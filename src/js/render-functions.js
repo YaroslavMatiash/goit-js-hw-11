@@ -37,7 +37,7 @@ export function getMarkup(data) {
         downloads,
       }) => `<li class="card-item">
   <a href=${largeImageURL}
-    ><img src=${webformatURL} alt="${tags}" height="200"/>
+    ><img src=${webformatURL} alt="${tags}" height="300"/>
     <ul class="card-info">
       <li>
         Likes

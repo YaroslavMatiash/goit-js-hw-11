@@ -1,25 +1,28 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 import { fetchCards } from './js/pixabay-api';
 import { renderCards } from './js/render-functions';
 
 const searchForm = document.querySelector('.search-form');
+const searchInput = document.querySelector('.search-input');
 const cardsList = document.querySelector('.card-list');
 const loader = document.querySelector('.loader');
 
 searchForm.addEventListener('submit', onSearchFormSubmit);
 
-const instance = new SimpleLightbox('.card-item a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
-
 function onSearchFormSubmit(e) {
   e.preventDefault();
 
-  const searchQuery = e.currentTarget.elements.search.value.trim();
-  e.currentTarget.elements.search.value = '';
+  const searchQuery = searchInput.value.trim();
+  if (!searchQuery) {
+    iziToast.error({
+      title: 'Error',
+      message: 'Please enter a search query.',
+      position: 'topRight',
+    });
+    return;
+  }
 
   cardsList.innerHTML = '';
   toggleLoader();
@@ -27,8 +30,19 @@ function onSearchFormSubmit(e) {
   fetchCards(searchQuery)
     .then(data => {
       renderCards(cardsList, data);
+      searchInput.value = '';
     })
-    .then(() => toggleLoader());
+    .catch(error => {
+      iziToast.error({
+        title: 'Error',
+        message: 'Failed to fetch images. Please try again later.',
+        position: 'topRight',
+      });
+      console.error('Fetch error:', error);
+    })
+    .finally(() => {
+      toggleLoader();
+    });
 }
 
 function toggleLoader() {
